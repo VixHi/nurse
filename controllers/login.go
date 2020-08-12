@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -29,6 +30,11 @@ func (c *LoginController) GetVerifyCode() {
 		c.ServeJSON()
 	*/
 
+	// beego.Info("获取参数code:", c.Ctx.Input.Param("code"), c.Input().Get("code"), c.Ctx.Request)
+	//获取用户传入的code
+	userCode := c.Input().Get("code")
+
+	//服务器code
 	conn, err := redis.Dial("tcp", ":6379")
 	defer conn.Close()
 	if err != nil {
@@ -41,8 +47,22 @@ func (c *LoginController) GetVerifyCode() {
 		beego.Info(err)
 		return
 	}
-	beego.Info(reply)
-	c.Data["json"] = map[string]interface{}{"code": reply}
+
+	fmt.Printf("%V %T :::: %V %T\n", reply, userCode)
+	if reply == userCode {
+		c.Data["json"] = map[string]string{
+			"msg":   "成功",
+			"code":  "200",
+			"error": "",
+		}
+	} else {
+		c.Data["json"] = map[string]string{
+			"msg":   "失败",
+			"code":  "400",
+			"error": "",
+		}
+	}
+
 	c.ServeJSON()
 }
 
