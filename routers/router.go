@@ -8,14 +8,22 @@ import (
 
 func init() {
 	//nurse 路由
-	beego.Router("/nurse", &controllers.NurseController{})
-	//护士title路由
-	// ns_nurse := beego.NewNameSpace("nurse",
-	// 	beego.NSNameSpace("/title",
-	// 		beego.NSIncloud(
-	// 			&controllers.NurseController{}
-	// 		),
-	// 	),
-	// )
-	// beego.AddNameSpace(ns_nurse)
+	nurseNS := beego.NewNamespace("/nurse",
+
+		beego.NSRouter("", &controllers.NurseController{}),
+
+		beego.NSRouter("/title", &controllers.NurseController{}, "get:GetNurseTitle;Put:UpdateNurseTitle"),
+
+		// beego.NSNamespace("/api",
+		// 	beego.NSInclude(
+		// 		&controllers.NurseController{},
+		// 	),
+		// ),
+	)
+	beego.AddNamespace(nurseNS)
+
+	loginNS := beego.NewNamespace("/login",
+		beego.NSRouter("/verifyCode", &controllers.LoginController{}, "get:GetVerifyCode;post:CreateVerifyCode"),
+	)
+	beego.AddNamespace(loginNS)
 }

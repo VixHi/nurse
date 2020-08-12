@@ -8,24 +8,34 @@ type NurseController struct {
 }
 
 // Get : 获取用户信息
-func (nurse *NurseController) Get() {
-	nurse.Ctx.WriteString("1234")
+func (c *NurseController) Get() {
+	c.Ctx.WriteString("1234")
 }
 
 // Post : 新增护士
-func (nurse *NurseController) Post() {
-	nurse.Ctx.WriteString("1234")
+func (c *NurseController) Post() {
+	c.Ctx.WriteString("1234")
 
 }
 
 // Put : 更改用户信息
-func (nurse *NurseController) Put() {
-	nurse.Ctx.WriteString("1234")
+func (c *NurseController) Put() {
+	c.Ctx.WriteString("1234")
 
 }
 
 // Delete : 删除护士
-func (nurse *NurseController) Delete() {
-	nurse.Ctx.WriteString("12345")
+func (c *NurseController) Delete() {
+	c.Ctx.WriteString("12345")
 
+}
+
+// GetNurseTitle : 获取护士的职称
+func (c *NurseController) GetNurseTitle() {
+	c.Ctx.WriteString("获取护士的职称")
+}
+
+// UpdateNurseTitle :更改护士的职称
+func (c *NurseController) UpdateNurseTitle() {
+	c.Ctx.WriteString("更改护士的职称")
 }

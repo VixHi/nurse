@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"time"
+	_ "viv/models"
 	_ "viv/routers"
 
 	"github.com/astaxie/beego"
