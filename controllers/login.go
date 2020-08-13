@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"math/rand"
+	"path"
 	"strconv"
 	"time"
 	"viv/util"
@@ -118,5 +119,29 @@ func (c *LoginController) GetPwd() {
 
 // UploageUserImage : 护士资格证上传
 func (c *LoginController) UploageUserImage() {
+
+	f, h, err := c.GetFile("userImage")
+	if err != nil {
+		beego.Info(err)
+		return
+	}
+	defer f.Close()
+	fileExt := path.Ext(h.Filename)
+	if fileExt != ".png" && fileExt != ".jpg" && fileExt != ".jpeg" {
+		beego.Info("文件格式不对")
+		return
+	}
+
+	if h.Size > 5*1024*1024 {
+		beego.Info("文件太大")
+		return
+	}
+
+	timeStr := time.Now().Format("2006-01-02 03:04:06")
+	imageName := timeStr + fileExt
+	imageURL := "/static/img/" + imageName
+	beego.Info(imageURL)
+	c.SaveToFile("userImage", "."+imageURL)
+	c.Ctx.WriteString("文件上传成功")
 
 }
