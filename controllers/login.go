@@ -3,7 +3,9 @@ package controllers
 import (
 	"fmt"
 	"math/rand"
+	"strconv"
 	"time"
+	"viv/util"
 
 	"github.com/astaxie/beego"
 	"github.com/gomodule/redigo/redis"
@@ -79,7 +81,9 @@ func (c *LoginController) CreateVerifyCode() {
 		return
 	}
 
-	conn.Do("set", "codeVerify", code)
+	conn.Do("setex", "codeVerify", code, 1800*time.Second)
+
+	c.Ctx.WriteString(strconv.Itoa(code))
 
 	/*
 		beego.Info(code)
@@ -90,5 +94,29 @@ func (c *LoginController) CreateVerifyCode() {
 		}
 		cac.Put("verifyCode", code, 1800*time.Second)
 	*/
+
+}
+
+// GetPwd : 获取注册密码并保存
+func (c *LoginController) GetPwd() {
+	pwd := c.Input().Get("pwd")
+	res := util.CheckPwd(pwd)
+	fmt.Println("====", res)
+	conn, err := redis.Dial("tcp", ":6379")
+	defer conn.Close()
+	if err != nil {
+		beego.Info(err)
+		return
+	}
+	//设置过期时间
+	conn.Do("setex", "pwd", pwd, 1800*time.Second)
+	c.Data["json"] = map[string]string{
+		"pwd": pwd,
+	}
+	c.ServeJSON()
+}
+
+// UploageUserImage : 护士资格证上传
+func (c *LoginController) UploageUserImage() {
 
 }
