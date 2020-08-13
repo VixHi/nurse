@@ -24,6 +24,8 @@ func init() {
 
 	loginNS := beego.NewNamespace("/login",
 		beego.NSRouter("/verifyCode", &controllers.LoginController{}, "get:GetVerifyCode;post:CreateVerifyCode"),
+		beego.NSRouter("/password", &controllers.LoginController{}, "post:GetPwd"),
+		beego.NSRouter("/userImage", &controllers.LoginController{}, "post:UploageUserImage"),
 	)
 	beego.AddNamespace(loginNS)
 }
