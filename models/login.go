@@ -5,7 +5,3 @@ package models
 // 	ID   int
 // 	Code string
 // }
-
-// func init() {
-
-// }
