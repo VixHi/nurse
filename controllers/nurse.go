@@ -9,6 +9,7 @@ type NurseController struct {
 
 // Get : 获取用户信息
 func (c *NurseController) Get() {
+
 	c.Ctx.WriteString("1234")
 }
 

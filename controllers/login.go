@@ -175,21 +175,32 @@ func (c *LoginController) RegisterUser() {
 	}
 
 	phone, err := redis.String(conn.Do("get", "phone"))
+	// phone := c.GetString("phone")
 	beego.Info(phone)
 	if err != nil {
 		beego.Info(err)
 		c.Data["json"] = vutil.ResponseWith(500, "数据库连接错误", nil)
 		return
 	}
-
-	nurse := models.Nurse{
-		Name:  "vix" + phone,
-		Phone: phone,
-		Sex:   "女",
-		Title: "主任护士",
+	hospital := models.Hospital{}
+	hospital.Id = 2
+	o := orm.NewOrm()
+	err = o.Read(&hospital)
+	if err != nil {
+		beego.Info(err)
+		return
 	}
 
-	o := orm.NewOrm()
+	nurse := models.Nurse{
+		Name:  "viv" + phone,
+		Phone: phone,
+		Sex:   "女",
+		Title: "初级护士",
+	}
+
+	nurse.Hospital = &hospital
+	beego.Info(hospital, nurse)
+
 	_, err = o.Insert(&nurse)
 	if err != nil {
 		beego.Info(err)
@@ -198,5 +209,5 @@ func (c *LoginController) RegisterUser() {
 	}
 
 	c.Data["json"] = vutil.ResponseWith(500, "数据库插入出错", nurse)
-
+	c.ServeJSON()
 }

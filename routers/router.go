@@ -19,6 +19,7 @@ func init() {
 	)
 	beego.AddNamespace(nurseNS)
 
+	//登录路由
 	loginNS := beego.NewNamespace("/login",
 		beego.NSRouter("/verifyCode", &controllers.LoginController{}, "get:GetVerifyCode;post:CreateVerifyCode"),
 		beego.NSRouter("/password", &controllers.LoginController{}, "post:GetPwd"),
@@ -26,4 +27,17 @@ func init() {
 		beego.NSRouter("/users", &controllers.LoginController{}, "post:RegisterUser"),
 	)
 	beego.AddNamespace(loginNS)
+
+	//新闻模块路由
+	newsNS := beego.NewNamespace("/news",
+		beego.NSRouter("", &controllers.NewsController{}),
+	)
+	beego.AddNamespace(newsNS)
+
+	//医院模块路由
+	hospitalNS := beego.NewNamespace("/hospital",
+		beego.NSRouter("", &controllers.HospitalController{}),
+	)
+	beego.AddNamespace(hospitalNS)
+
 }
