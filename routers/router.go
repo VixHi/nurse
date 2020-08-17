@@ -11,10 +11,10 @@ func init() {
 	fmt.Println("=======router==========")
 
 	//nurse 路由
-	nurseNS := beego.NewNamespace("/nurse",
+	nurseNS := beego.NewNamespace("/nurses",
 
 		beego.NSRouter("", &controllers.NurseController{}),
-
+		beego.NSRouter("/type", &controllers.NurseController{}, "get:GetNursesByType"),
 		beego.NSRouter("/title", &controllers.NurseController{}, "get:GetNurseTitle;Put:UpdateNurseTitle"),
 	)
 	beego.AddNamespace(nurseNS)
@@ -35,7 +35,7 @@ func init() {
 	beego.AddNamespace(newsNS)
 
 	//医院模块路由
-	hospitalNS := beego.NewNamespace("/hospital",
+	hospitalNS := beego.NewNamespace("/hospitals",
 		beego.NSRouter("", &controllers.HospitalController{}),
 	)
 	beego.AddNamespace(hospitalNS)

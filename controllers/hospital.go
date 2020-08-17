@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"strconv"
 	"viv/models"
+	"viv/vutil"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -14,7 +16,11 @@ type HospitalController struct {
 
 // Get : 医院获取
 func (c *HospitalController) Get() {
-
+	nurseID := c.GetString("nurseId")
+	if nurseID != "" {
+		getHospitalByNurse(c, nurseID)
+		return
+	}
 }
 
 // Post : 新增医院
@@ -55,4 +61,32 @@ func (c *HospitalController) Delete() {
 		return
 	}
 	c.Ctx.WriteString("删除成功")
+}
+
+// getHospitalByNurse : 根据护士检索医院
+func getHospitalByNurse(c *HospitalController, nurseID string) {
+	ID, err := strconv.Atoi(nurseID)
+	if err != nil {
+		beego.Info(err)
+		return
+	}
+	nurse := models.Nurse{
+		Id: ID,
+	}
+	o := orm.NewOrm()
+
+	err = o.QueryTable("nurse").Filter("Id", nurseID).RelatedSel().One(&nurse)
+	if err != nil {
+		beego.Info(err)
+		return
+	}
+	_, err = o.LoadRelated(&nurse, "Hospital")
+	hospital := nurse.Hospital
+	c.Data["json"] = vutil.ResponseWith(200, "success", hospital)
+	c.ServeJSON()
+}
+
+// getHospitalByID : 根据医院ID检索医院
+func getHospitalByID() {
+
 }
