@@ -116,11 +116,13 @@ func getNursesByHospitalID(c *NurseController, hospitalID string) {
 	}
 	nurses := []models.Nurse{}
 	o := orm.NewOrm()
-	_, err = o.QueryTable("nurse").Filter("Hospital", hospital).All(&nurses)
+	//外健 获取hospial数据
+	_, err = o.QueryTable("nurse").Filter("Hospital", hospital).RelatedSel().All(&nurses)
 	if err != nil {
 		beego.Info(err)
 		return
 	}
+	// _, err = o.RelatedSel(&nurses, "Hospital")
 	c.Data["json"] = vutil.ResponseWith(200, "success", nurses)
 	c.ServeJSON()
 }

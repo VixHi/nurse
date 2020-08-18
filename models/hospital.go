@@ -8,5 +8,6 @@ type Hospital struct {
 	Lat           string   `json:"lat"`
 	Lon           string   `json:"lon"`
 	Level         string   `json:"level"`
-	Nurses        []*Nurse `orm:"reverse(many)";json:"nurses"`
+	Nurses        []*Nurse `orm:"reverse(many)";json:"nurses"` //反向
+	News          []*News  `orm:"reverse(many)"`               //多对对
 }

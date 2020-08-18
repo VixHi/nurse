@@ -80,9 +80,9 @@ func getHospitalByNurse(c *HospitalController, nurseID string) {
 		beego.Info(err)
 		return
 	}
-	_, err = o.LoadRelated(&nurse, "Hospital")
-	hospital := nurse.Hospital
-	c.Data["json"] = vutil.ResponseWith(200, "success", hospital)
+	// _, err = o.LoadRelated(&nurse, "Hospital")
+	// hospital := nurse.Hospital
+	c.Data["json"] = vutil.ResponseWith(200, "success", nurse)
 	c.ServeJSON()
 }
 
