@@ -9,5 +9,5 @@ type News struct {
 	Content    string    `json:"content`
 	CreateTime time.Time `orm:"auto_now",json:"creatTime"`
 	Hospital   *Hospital `orm:"rel(fk)"`
-	Nurse      []*Nurse  `orm:"reverse(many)"`
+	Nurses     []*Nurse  `orm:"reverse(many)"`
 }
