@@ -14,8 +14,27 @@ type NurseController struct {
 	beego.Controller
 }
 
+// nurseParse : 参数解析到结构体，通过form形式
+type nurseParse struct {
+	Page       int    `form:"page"`
+	Size       int    `form:"size"`
+	Title      string `form:"title"`
+	HospitalId string `form:"hospitalId"`
+	NurseId    string `form:"nurseId"`
+}
+
+//全局变量
+var nurse_parse nurseParse //护士请求参数
+
 // Get : 获取用户信息
 func (c *NurseController) Get() {
+	nurse_parse = nurseParse{}
+	if err := c.ParseForm(&nurse_parse); err != nil {
+		beego.Info(err)
+		return
+	}
+	beego.Info(nurse_parse)
+
 	nurseID := c.GetString("id")
 	if nurseID != "" {
 		getNurseByID(c, nurseID)
@@ -117,12 +136,15 @@ func getNursesByHospitalID(c *NurseController, hospitalID string) {
 	nurses := []models.Nurse{}
 	o := orm.NewOrm()
 	//外健 获取hospial数据
-	_, err = o.QueryTable("nurse").Filter("Hospital", hospital).RelatedSel().All(&nurses)
+	qs := o.QueryTable("nurse")
+	total, err := qs.Filter("Hospital", hospital).RelatedSel().Count()
 	if err != nil {
 		beego.Info(err)
 		return
 	}
 	// _, err = o.RelatedSel(&nurses, "Hospital")
+	beego.Info("护士总数:", total)
+	qs.Limit(nurse_parse.Size, 1).All(&nurses)
 	c.Data["json"] = vutil.ResponseWith(200, "success", nurses)
 	c.ServeJSON()
 }

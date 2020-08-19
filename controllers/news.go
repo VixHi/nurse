@@ -16,7 +16,6 @@ type NewsController struct {
 
 // Get : Get请求
 func (c *NewsController) Get() {
-	//多对多写入
 	newsID := c.GetString("newsId")
 	ID, err := strconv.Atoi(newsID)
 	if err != nil {
@@ -46,8 +45,6 @@ func (c *NewsController) Get() {
 		beego.Info(err)
 		return
 	}
-	beego.Info(news)
-
 	o.LoadRelated(&news, "Nurses")
 	c.Data["json"] = vutil.ResponseWith(200, "success", news)
 	c.ServeJSON()
