@@ -4,6 +4,7 @@ import (
 	"path"
 	"time"
 	"viv/models"
+	"viv/vutil"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -41,8 +42,9 @@ func (c *FileController) UploadFiles() {
 		fname := timeStr + imageExt
 		imageURL := "/static/img/" + fname
 		c.SaveToFile("images", "."+imageURL)
-		imageModel := models.Image{ImageStr: imageURL}
-		_, err = o.Insert(&imageModel)
+		err = insertFileToDBWithHash(o, "."+imageURL)
+		// imageModel := models.Image{ImageStr: imageURL}
+		// _, err = o.Insert(&imageModel)
 		if err != nil {
 			beego.Info(err)
 			continue
@@ -50,6 +52,24 @@ func (c *FileController) UploadFiles() {
 	}
 
 	c.Ctx.WriteString("1234")
+}
+
+// insertFileToDBWithHash : 文件插入数据库 hash唯一 节省磁盘空间
+func insertFileToDBWithHash(o orm.Ormer, filepath string) error {
+	hashvalue, err := vutil.VHashValue(filepath)
+	if err != nil {
+		beego.Info(err)
+		return err
+	}
+	imageModel := models.Image{Hash: hashvalue}
+	err = o.Read(&imageModel, "Hash")
+	if err == nil {
+		beego.Info(err)
+		return nil
+	}
+	imageModel.ImageStr = filepath
+	_, err = o.Insert(&imageModel)
+	return err
 }
 
 // UploadFile : 大文件上传
