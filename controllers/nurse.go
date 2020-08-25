@@ -28,6 +28,8 @@ var nurse_parse nurseParse //护士请求参数
 
 // Get : 获取用户信息
 func (c *NurseController) Get() {
+
+	// beego.Info(c.Params())
 	nurse_parse = nurseParse{}
 	if err := c.ParseForm(&nurse_parse); err != nil {
 		beego.Info(err)
@@ -47,6 +49,7 @@ func (c *NurseController) Get() {
 	}
 	hospitalID := c.GetString("hospitalId")
 	if hospitalID != "" {
+		// c.HandlerFunc()
 		getNursesByHospitalID(c, hospitalID)
 		return
 	}

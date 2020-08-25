@@ -40,4 +40,10 @@ func init() {
 	)
 	beego.AddNamespace(hospitalNS)
 
+	//文件上传
+	fileNS := beego.NewNamespace("/upload",
+		beego.NSRouter("/file", &controllers.FileController{}, "post:UploadFile"),
+		beego.NSRouter("/files", &controllers.FileController{}, "post:UploadFiles"),
+	)
+	beego.AddNamespace(fileNS)
 }

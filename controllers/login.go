@@ -146,7 +146,7 @@ func (c *LoginController) UploageUserImage() {
 		return
 	}
 
-	timeStr := time.Now().Format("2006-01-02 03:04:06")
+	timeStr := time.Now().Format("2006-01-02 03:04:05")
 	imageName := timeStr + fileExt
 	imageURL := "/static/img/" + imageName
 	beego.Info(imageURL)
