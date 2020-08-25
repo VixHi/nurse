@@ -144,7 +144,8 @@ func getNursesByHospitalID(c *NurseController, hospitalID string) {
 	}
 	// _, err = o.RelatedSel(&nurses, "Hospital")
 	beego.Info("护士总数:", total)
-	qs.Limit(nurse_parse.Size, 1).All(&nurses)
+	start := nurse_parse.Size * (nurse_parse.Page - 1)
+	qs.Limit(nurse_parse.Size, start).All(&nurses)
 	c.Data["json"] = vutil.ResponseWith(200, "success", nurses)
 	c.ServeJSON()
 }
